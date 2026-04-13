@@ -7,4 +7,12 @@ module.exports = defineConfig([
   {
     ignores: ['dist/*'],
   },
+  {
+    settings: {
+      'import/ignore': ['@env'],
+    },
+    rules: {
+      'import/no-unresolved': ['error', { ignore: ['^@env$'] }],
+    },
+  },
 ]);

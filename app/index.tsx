@@ -14,6 +14,7 @@ import {
   View
 } from 'react-native';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { USDA_API_KEY } from '@env';
 import { Button, MD3LightTheme as DefaultTheme, Provider as PaperProvider, TextInput } from "react-native-paper";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -140,7 +141,7 @@ export default function Page() {
     }
   }, [logExistingFoodsModalVisible]);
 
-  const USDA_API_KEY = "aNnFD7zbnXgM7flXxFx9JMqYgCbtDRDP7dKnmbUP";
+  // API key is loaded from .env via @env module (see .env.example)
 
   // const groupedByMeal = {
   //   Breakfast: log.filter(item => item.meal === "Breakfast"),
@@ -210,12 +211,17 @@ export default function Page() {
       return;
     }
 
+    const clampNutrient = (val: string) => {
+      const num = parseFloat(val) || 0;
+      return Math.max(0, Math.min(num, 99999));
+    };
+
     const nutrients = {
-      calories: parseFloat(manualNutrition.calories) || 0,
-      carbs: parseFloat(manualNutrition.carbs) || 0,
-      protein: parseFloat(manualNutrition.protein) || 0,
-      fat: parseFloat(manualNutrition.fat) || 0,
-      sugar: parseFloat(manualNutrition.sugar) || 0,
+      calories: clampNutrient(manualNutrition.calories),
+      carbs: clampNutrient(manualNutrition.carbs),
+      protein: clampNutrient(manualNutrition.protein),
+      fat: clampNutrient(manualNutrition.fat),
+      sugar: clampNutrient(manualNutrition.sugar),
     };
 
     const entry = {
@@ -1451,4 +1457,4 @@ const styles = StyleSheet.create({
     maxHeight: '85%',
   },
 
-}); 
+});  
