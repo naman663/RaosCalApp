@@ -117,6 +117,8 @@ export default function Page() {
   const [mealName, setMealName] = useState('');
   const [mealItems, setMealItems] = useState<LogEntry[]>([]);
   const [createNewMealModalVisible, setCreateNewMealModalVisible] = useState(false);
+  const [logRestaurantFoodModalVisible, setlogRestaurantFoodModalVisible] = useState(false);
+  const [restaurantQuery, setRestaurantQuery] = useState('');
 
   const totalMacros = mealItems.reduce((totals, item) => ({
     calories: totals.calories + item.calories,
@@ -685,6 +687,19 @@ export default function Page() {
               >
                 <Text style={[styles.modalButtonText, { color: "#333" }]}>📁 Log Existing Food or Meal</Text>
               </Pressable>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.modalButton,
+                  { backgroundColor: "#ddd" },
+                  pressed && { backgroundColor: "#bbb" }
+                ]}
+                onPress={() => {
+                  setLogChoiceModalVisible(false);
+                  setlogRestaurantFoodModalVisible(true);
+                }}
+              >
+                <Text style={[styles.modalButtonText, { color: "#333" }]}>🍔 Log Restaurant Food </Text>
+              </Pressable>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -1023,6 +1038,54 @@ export default function Page() {
               )}
             </View>
           </View>
+        </KeyboardAvoidingView>
+      </Modal>
+      <Modal
+        visible={logRestaurantFoodModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setlogRestaurantFoodModalVisible(false)}  
+      >
+        <KeyboardAvoidingView behavior="padding" style={{ flex: 1}}>
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View style={styles.modalCard}>
+              {/* Exit button */}
+              <Pressable
+                onPress={() => setlogRestaurantFoodModalVisible(false)}
+                style={{ position: "absolute", top: 10, right: 10, zIndex: 1}}
+              >
+                <Ionicons name="close" size={28} color="#333" />
+              </Pressable>
+
+              <Text style={styles.modalTitle}>
+                Log Restaurant Food
+              </Text>
+
+              <TextInput
+                placeholder="Example: Taco Bell - Cheesy Bean & Rice Burrito"
+                style={styles.input}
+                value={restaurantQuery}
+                onChangeText={setRestaurantQuery}
+              />
+
+              <TouchableOpacity
+                style={styles.logButton}
+                onPress={() => {
+                  // restaurant search logic
+                }}
+              >
+                <Text style={styles.logButtonText}>
+                  🔍 Search Restaurant
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </KeyboardAvoidingView>
       </Modal>
       <Modal
